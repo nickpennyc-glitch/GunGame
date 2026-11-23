@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONE-BULLET WESTERN</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="touchControls" aria-label="Touch controls">
+    <div class="touch-player" id="touchPlayer1"><div class="touch-stick" id="stickZone1" aria-label="Move Player 1"><div class="stick-knob" id="stickKnob1"></div></div></div>
+    <div class="touch-player" id="touchPlayer2"><div class="touch-stick" id="stickZone2" aria-label="Move Player 2"><div class="stick-knob" id="stickKnob2"></div></div></div>
+</div>
+
+<div id="title">
+    <div class="small">THE OLD WEST</div>
+    <h1>ONE-BULLET<br>WESTERN</h1>
+    <div class="subtitle">ONE SHOT. ONE CHANCE.</div>
+    <label class="weapon-choice" for="matchMode">GAME MODE</label>
+    <select id="matchMode">
+        <option value="classic">CLASSIC DUEL</option>
+        <option value="custom">CUSTOM SHOOTOUT</option>
+        <option value="juggernaut">JUGGERNAUT</option>
+        <option value="oneBullet">ONE-BULLET SIDE VIEW</option>
+    </select>
+    <div id="customSettings" class="mode-settings" aria-label="Custom shootout settings">
+        <label class="weapon-choice" for="customShooters">CPU SHOOTERS</label>
+        <select id="customShooters"><option value="1">1 SHOOTER</option><option value="2">2 SHOOTERS</option><option value="3">3 SHOOTERS</option><option value="4">4 SHOOTERS</option><option value="5">5 SHOOTERS</option><option value="6">6 SHOOTERS</option><option value="7">7 SHOOTERS</option><option value="8">8 SHOOTERS</option><option value="9">9 SHOOTERS</option><option value="10">10 SHOOTERS</option></select>
+        <label class="weapon-choice" for="difficulty">OPPONENT DIFFICULTY</label>
+        <select id="difficulty"><option value="easy">EASY</option><option value="medium" selected>MEDIUM</option><option value="hard">HARD</option><option value="xhard">X HARD</option></select>
+        <label class="weapon-choice" for="customBulletSpeed">BULLET / AXE SPEED</label>
+        <input id="customBulletSpeed" type="range" min="50" max="200" value="100"><output id="bulletSpeedLabel">100%</output>
+        <label class="weapon-choice" for="customPlayerSpeed">PLAYER SPEED</label>
+        <input id="customPlayerSpeed" type="range" min="50" max="200" value="100"><output id="playerSpeedLabel">100%</output>
+        <label class="weapon-choice" for="customHealth">HEALTH</label>
+        <select id="customHealth"><option value="1">1</option><option value="3">3</option><option value="5" selected>5</option><option value="10">10</option><option value="20">20</option></select>
+        <div id="customTeamsSetting" class="team-setting">
+            <label class="weapon-choice" for="customTeams">TEAMS (SPLIT INTO TWO SIDES)</label>
+            <select id="customTeams"><option value="off" selected>OFF — FREE-FOR-ALL</option><option value="on">ON — TWO TEAMS</option></select>
+            <div id="customPlayerTeams" class="player-team-setting">
+                <label class="weapon-choice" for="customP1Team">PLAYER 1 TEAM</label>
+                <select id="customP1Team"><option value="0">TEAM 1</option><option value="1">TEAM 2</option></select>
+                <label class="weapon-choice" for="customP2Team">PLAYER 2 TEAM</label>
+                <select id="customP2Team"><option value="1">TEAM 2</option><option value="0">TEAM 1</option></select>
+            </div>
+        </div>
+    </div>
+    <div id="juggernautSettings" class="mode-settings" aria-label="Juggernaut role selection">
+        <label class="weapon-choice" for="juggernautRole">CHOOSE YOUR ROLE</label>
+        <select id="juggernautRole">
+            <option value="juggernaut">JUGGERNAUT — 40 HEALTH VS 3 CPU FIGHTERS</option>
+            <option value="challenger">FIGHTER — CHALLENGE THE 40-HEALTH JUGGERNAUT</option>
+        </select>
+    </div>
+    <label class="weapon-choice" for="weaponChoice">CHOOSE YOUR WEAPON</label>
+    <select id="weaponChoice"><option value="revolver">SIX-SHOOTER — 1/5 DAMAGE, 6 SHOTS</option><option value="single">SINGLE BULLET — 5/5 DAMAGE, PICK UP EACH SHOT</option><option value="axe">THROWING AXE — 4/5 DAMAGE + CLOSE ATTACK</option></select>
+    <label class="weapon-choice" for="player2WeaponChoice">PLAYER 2 WEAPON (LOCAL DUEL)</label>
+    <select id="player2WeaponChoice"><option value="revolver">SIX-SHOOTER — 1/5 DAMAGE, 6 SHOTS</option><option value="single">SINGLE BULLET — 5/5 DAMAGE, PICK UP EACH SHOT</option><option value="axe">THROWING AXE — 4/5 DAMAGE + CLOSE ATTACK</option></select>
+    <label class="weapon-choice" for="controlMode">CHOOSE CONTROLS</label>
+    <select id="controlMode"><option value="desktop">DESKTOP — WASD + MOUSE</option><option value="mobile">MOBILE — TOUCH CONTROLS</option></select>
+    <label class="weapon-choice" for="gameMode">LOCAL PLAYERS (MOBILE ONLY)</label>
+    <select id="gameMode"><option value="solo">SOLO — FIGHT THE OPPONENTS</option><option value="twoPlayer">2 PLAYERS — LOCAL DUEL</option></select>
+    <button id="start">ENTER THE SALOON</button>
+</div>
+
+<div id="hud">
+    <div class="hud-left"><div class="hud-label" id="playerHudLabel">YOUR AMMUNITION</div><div id="ammo">1 BULLET</div><div id="status">READY TO SHOOT</div></div>
+    <div class="hud-center"><div id="round">DUEL 01</div><div id="score">WINS: 0</div><div id="weaponName">SINGLE BULLET</div><div id="matchStats">DUEL STATS: <span id="statWins">0</span> WINS · <span id="statShots">0</span> SHOTS · <span id="statHits">0</span> HITS · <span id="statAccuracy">0%</span> ACCURACY</div><div id="health">YOU: 5/5</div></div>
+    <div class="hud-right"><div class="hud-label" id="opponentHudLabel">OPPONENT</div><div id="enemyAmmo">ARMED</div><div id="enemyWeapon">WEAPON: —</div><div id="enemyHealth">5/5</div></div>
+</div>
+<div id="message"></div>
+<div id="controls">P1: WASD MOVE, MOUSE AIM/FIRE<br>WALK OVER YOUR DROPPED AMMO OR AXE TO PICK IT UP</div>
+<div id="mobileHelp">SOLO: LEFT MOVE, TAP TO AIM &amp; FIRE &nbsp; | &nbsp; 2P: LEFT/RIGHT HALF MOVE &amp; TAP TO ATTACK</div>
+<div id="customPage" aria-label="Custom shootout settings">
+    <div class="small">BUILD YOUR SHOOTOUT</div>
+    <h2>CUSTOM SHOOTOUT</h2>
+    <p class="custom-intro">SET CPU COUNT, DIFFICULTY, BULLET / AXE SPEED, PLAYER SPEED, HEALTH, AND TEAM PLAY.</p>
+    <div id="customSettingsPage"></div>
+    <div class="page-buttons"><button id="customBack" type="button">BACK</button><button id="customStart" type="button">START SHOOTOUT</button></div>
+</div>
+<div id="gameover"><h1 id="result">WASTED</h1><p id="resultText">The West wasn't ready for you.</p><div class="page-buttons"><button id="restart">PLAY AGAIN</button><button id="mainMenu" type="button">MAIN MENU</button></div></div>
+<div id="countdownOverlay" aria-live="assertive"><span id="countdownText">NEXT ROUND IN 3</span></div>
+<div id="sideControls" aria-label="Side-view controls"><div class="side-control-player" id="sidePlayer1Controls"><span>P1</span><button id="sideJump" type="button">JUMP</button><button id="sideDuck" type="button">DUCK</button><button id="sideFireUp" type="button">SHOOT UP</button><button id="sideFireDown" type="button">SHOOT DOWN</button></div><div class="side-control-player" id="sidePlayer2Controls"><span>P2</span><button id="sideJump2" type="button">JUMP</button><button id="sideDuck2" type="button">DUCK</button><button id="sideFireUp2" type="button">SHOOT UP</button><button id="sideFireDown2" type="button">SHOOT DOWN</button></div></div>
+<script src="script.js"></script>
+</body>
+</html>
